@@ -16,7 +16,7 @@ public class InteractWithDatabase {
 		else{
 			try {
 				Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-				String msAccDB = "D:\\Documents\\Michigan Tech\\Michigan Tech 2017-2018\\Semester 1\\Team Software Project\\Database2\\SF1_Access2007_5.accdb";
+				String msAccDB = "D:\\Documents\\Michigan Tech\\Michigan Tech 2017-2018\\Semester 1\\Team Software Project\\Database2\\SF1_Access2007_1.accdb";
 				String dbURL = "jdbc:ucanaccess://" + msAccDB;
 				connection = DriverManager.getConnection(dbURL);
 			} catch (ClassNotFoundException cnfex) {
@@ -50,6 +50,10 @@ public class InteractWithDatabase {
 		Statistics test = new Statistics();
 		try {
 			printData(test.getTotalPop());
+			System.out.print("\n-------------------------------------------\n");
+			printData(test.getWhitePopNotHisp());
+			System.out.print("\n-------------------------------------------\n");
+			printData(test.getAfricanPop());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

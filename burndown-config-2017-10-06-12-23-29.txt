@@ -18,4 +18,4 @@ STRETCH="0"
 #Remove the hash and insert correct values into the space separated list below.
 #Use + or - if you have scoped in/out work. E.g. 43+30 means
 #that 30 more hours of work is scoped in and 43 hours work is left to do.
-ACTUAL="100 98 96 96 94"
+ACTUAL="100 98 96 96 94 92 88"

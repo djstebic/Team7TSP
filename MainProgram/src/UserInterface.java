@@ -16,13 +16,16 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 public class UserInterface extends Application {
 
@@ -68,14 +71,50 @@ public class UserInterface extends Application {
         });
 		searchBox.setItems(filteredSearch);
 		
+		
+		//Help button
+		Button help = new Button();
+		help.getStyleClass().add("button-blue");
+		help.setText("?");
+		help.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Help Dialog");
+				alert.setHeaderText("Help Dialog");
+				alert.setContentText("This page is for help while operating the program.\n"
+						+ "-Select townships from the search bar at the top.");
+
+				alert.showAndWait();
+			}
+		});
+		
+		
+		//HBox at top of border pane
 		HBox dropDownHBox = new HBox();
 		dropDownHBox.getChildren().add(searchBox);
+		dropDownHBox.getChildren().add(help);
 		dropDownHBox.setAlignment(Pos.CENTER);
+		HBox.setMargin(searchBox, new Insets(0, 10, 0, 10));
+		help.setAlignment(Pos.CENTER_RIGHT);
 		HBox.setHgrow(searchBox, Priority.ALWAYS);
 		
+		//VBox to select what goes in table/graph
+		VBox attributes = new VBox();
+			//List of buttons on left side (need list of things we want)
+		Button att1 = new Button("att1");
+		
+		attributes.getChildren().add(att1);
+		attributes.setPadding(new Insets(5, 0, 0, 0));
+		
+		//Sets things to areas of the border pane
 		bp.setTop(dropDownHBox);
+		bp.setLeft(attributes);
+			//add locations for buttons and graphs
 		
 		Scene scene = new Scene(bp, 500, 500);
+		scene.getStylesheets().add("CSS.css");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}

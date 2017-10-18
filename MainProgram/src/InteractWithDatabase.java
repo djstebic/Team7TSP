@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -16,8 +20,8 @@ public class InteractWithDatabase {
 		else{
 			try {
 				Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-				String msAccDB = "D:\\Documents\\Michigan Tech\\Michigan Tech 2017-2018\\Semester 1\\Team Software Project\\Database2\\SF1_Access2007_1.accdb";
-				String dbURL = "jdbc:ucanaccess://" + msAccDB;
+				String msAccDB = "D:\\Census Database\\SF1_Access2007.accdb";
+				String dbURL = "jdbc:ucanaccess://" + msAccDB + ";keepMirror=" + getPathToMirror() + ",singleconnection=true";
 				connection = DriverManager.getConnection(dbURL);
 			} catch (ClassNotFoundException cnfex) {
 				System.out.println("Problem in loading or " + "registering MS Access JDBC driver");
@@ -27,6 +31,24 @@ public class InteractWithDatabase {
 			}
 			return connection;
 		}
+	}
+	
+	public static Path getPathToMirror() {
+	    try {
+	        Path temp = Paths.get(System.getProperty("java.io.tmpdir"));
+	        Path multum = Paths.get(temp + "/multum");
+	        if (!Files.exists(multum)) {
+	            multum = Files.createDirectory(multum);
+	        }
+	        Path hsqldb = Paths.get(multum + "/hsqldb");
+	        if (!Files.exists(hsqldb)) {
+	            hsqldb = Files.createDirectory(hsqldb);
+	        }
+	        return hsqldb;
+	    } catch (IOException e) {
+	        System.out.println("Unable to create Hsqldb directory");
+	    }
+	    return null;
 	}
 	
 	public static void printData(ResultSet toPrint) throws SQLException{

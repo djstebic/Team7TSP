@@ -1,6 +1,12 @@
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -28,8 +34,7 @@ public class UserInterface extends Application {
 		bp.setPadding(new Insets(10, 20, 10, 20));
 		
 		//Need to import township list if this is what we are doing
-		ObservableList<String> townships = FXCollections.observableArrayList("One", "Two", "Three", "Four", "Five", "Six",
-                "Seven", "Eight", "Nine", "Ten");
+		ObservableList<String> townships = townships();
 		
 		final ComboBox<String> searchBox = new ComboBox<String>(townships); //Search Box
 		searchBox.setEditable(true);							   //Allows box to be edited
@@ -74,6 +79,25 @@ public class UserInterface extends Application {
 		Scene scene = new Scene(bp, 500, 500);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+	}
+
+	private ObservableList<String> townships() {
+		Statistics ins = new Statistics();
+		ResultSet out = ins.getTownships();
+		ObservableList<String> townships = FXCollections.observableArrayList();
+		try {
+			ResultSetMetaData rsmd = out.getMetaData();
+			int columnsNumber = rsmd.getColumnCount();
+			while (out.next()) {
+				for (int i = 1; i <= columnsNumber; i++) {
+					String name = out.getString(i);
+					townships.add(name);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return townships;
 	}
 
 	public static void main(String[] args) {

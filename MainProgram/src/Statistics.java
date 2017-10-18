@@ -45,4 +45,17 @@ public class Statistics {
 		}
 		return result;
 	}
+	public ResultSet getTownships(){
+		Connection con = InteractWithDatabase.getConnection();
+		Statement state = null;
+		ResultSet result = null;
+		try {
+			state = con.createStatement();
+			result = state.executeQuery("select distinct NAME from Migeo2010 where NAME like '%township%'");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;		
+	}
 }

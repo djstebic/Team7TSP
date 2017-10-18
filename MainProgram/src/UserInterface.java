@@ -68,7 +68,6 @@ public class UserInterface extends Application {
         });
 		searchBox.setItems(filteredSearch);
 		
-		
 		HBox dropDownHBox = new HBox();
 		dropDownHBox.getChildren().add(searchBox);
 		dropDownHBox.setAlignment(Pos.CENTER);

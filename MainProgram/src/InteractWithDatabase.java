@@ -70,8 +70,8 @@ public class InteractWithDatabase {
 
 	public static void main(String[] args) {
 		Statistics test = new Statistics();
-//		try {
-//			printData(test.getTotalPop());
+		try {
+			printData(test.getTotalPop("Crystal Falls township"));
 //			System.out.print("\n-------------------------------------------\n");
 //			printData(test.getWhitePopNotHisp());
 //			System.out.print("\n-------------------------------------------\n");
@@ -79,9 +79,9 @@ public class InteractWithDatabase {
 //			System.out.print("\n-------------------------------------------\n");
 
 //			}
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

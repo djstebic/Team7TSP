@@ -4,13 +4,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Statistics {
-	public ResultSet getTotalPop(){
+	public ResultSet getTotalPop(String township){
 		Connection con = InteractWithDatabase.getConnection();
 		Statement state = null;
 		ResultSet result = null;
 		try {
 			state = con.createStatement();
-			result = state.executeQuery("select distinct POP100 from Migeo2010 where NAME = \"Crystal Falls township\"");
+			String part =  "\""+ township + "\"";
+			result = state.executeQuery("select distinct POP100 from Migeo2010 where NAME = " + part);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

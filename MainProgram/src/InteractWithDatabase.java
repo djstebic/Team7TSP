@@ -20,7 +20,7 @@ public class InteractWithDatabase {
 		else{
 			try {
 				Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-				String msAccDB = "D:\\Documents\\Michigan Tech\\Michigan Tech 2017-2018\\Semester 1\\Team Software Project\\Database2\\SF1_Access2007_1.accdb";
+				String msAccDB = "C:\\Users\\Brandon Smith\\Desktop\\New folder\\Census Database\\SF1_Access2007.accdb";
 				String dbURL = "jdbc:ucanaccess://" + msAccDB + ";keepMirror=" + getPathToMirror() + ",singleconnection=true";
 				connection = DriverManager.getConnection(dbURL);
 			} catch (ClassNotFoundException cnfex) {
@@ -36,7 +36,7 @@ public class InteractWithDatabase {
 	public static Path getPathToMirror() {
 	    try {
 	        Path temp = Paths.get(System.getProperty("java.io.tmpdir"));
-	        Path multum = Paths.get(temp + "/multum");
+	        Path multum = Paths.get("C:\\Users\\Brandon Smith\\Desktop\\New folder" + "\\multum");
 	        if (!Files.exists(multum)) {
 	            multum = Files.createDirectory(multum);
 	        }
@@ -70,8 +70,8 @@ public class InteractWithDatabase {
 
 	public static void main(String[] args) {
 		Statistics test = new Statistics();
-		try {
-			printData(test.getTotalPop("Crystal Falls township"));
+//		try {
+//			printData(test.getTotalPop());
 //			System.out.print("\n-------------------------------------------\n");
 //			printData(test.getWhitePopNotHisp());
 //			System.out.print("\n-------------------------------------------\n");
@@ -79,9 +79,9 @@ public class InteractWithDatabase {
 //			System.out.print("\n-------------------------------------------\n");
 
 //			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 }

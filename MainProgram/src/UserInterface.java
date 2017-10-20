@@ -6,13 +6,18 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -24,6 +29,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -92,12 +98,14 @@ public class UserInterface extends Application {
 				alert.showAndWait();
 			}
 		});
+
+		
 		
 		
 		HBox testoutput = new HBox();
 		TableView<Stat> table = new TableView<Stat>();
 		table.setEditable(true);
-		
+
 		// Test button for SQL
 		Button test = new Button();
 		test.setText("Test");
@@ -112,25 +120,18 @@ public class UserInterface extends Application {
 					ResultSetMetaData rsmd = result.getMetaData();
 					int columnsNumber = rsmd.getColumnCount();
 					ObservableList<Stat> valueList = FXCollections.observableArrayList();
-					
+					table.getItems().clear();
+					table.getColumns().clear();
 					while (result.next()) {
 						for (int i = 1; i <= columnsNumber; i++) {
-							//String value = result.getString(i);
 							
-							//System.out.println(value);
-							valueList.add(new Stat(result.getString(i)));
 							String columnName = rsmd.getColumnName(i);
-							// output += result.getString();
-							// output += "\n";
 							TableColumn<Stat, String> column = new TableColumn<Stat, String>(columnName);
 							column.setCellValueFactory(new PropertyValueFactory<Stat, String>("stat"));
-							table.setItems(valueList);
-							table.getColumns().addAll(column);
-							
-							//Label outputLabel = new Label("Population of Crystal Falls township"  + "\n" + columnValue);
-							//outputLabel.setStyle("-fx-font-size: 20; -fx-text-inner-color: #000000; -fx-opacity: 1.0");
-							//testoutput.getChildren().addAll(outputLabel);
+							table.getColumns().add(column);							valueList.add(new Stat(result.getString(i)));
 						}
+					
+					table.setItems(valueList);
 					}
 				} catch (SQLException e) {
 
@@ -156,20 +157,20 @@ public class UserInterface extends Application {
 		bottom.setAlignment(Pos.CENTER);
 
 		// Output for testing
-			//Label label1 = new Label("Output:");
-			//testoutput.getChildren().addAll(label1);
-		
+		// Label label1 = new Label("Output:");
+		// testoutput.getChildren().addAll(label1);
+
 		testoutput.setSpacing(10);
 		testoutput.setAlignment(Pos.CENTER);
 		testoutput.setDisable(true);
 
 		// VBox to select what goes in table/graph
 		VBox attributes = new VBox();
-		
+
 		// List of buttons on left side (need list of things we want)
-		//Button att1 = new Button("att1");
-		//attributes.getChildren().addAll(table);
-		//attributes.setPadding(new Insets(5, 0, 0, 0));
+		// Button att1 = new Button("att1");
+		// attributes.getChildren().addAll(table);
+		// attributes.setPadding(new Insets(5, 0, 0, 0));
 
 		// Sets things to areas of the border pane
 		bp.setTop(dropDownHBox);

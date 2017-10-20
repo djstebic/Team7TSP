@@ -10,6 +10,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.util.Callback;
+
 public class InteractWithDatabase {
 	public static Connection connection = null;
 	
@@ -68,6 +76,9 @@ public class InteractWithDatabase {
 		}
 	}
 
+	
+	
+	
 	public static void main(String[] args) {
 		Statistics test = new Statistics();
 		try {

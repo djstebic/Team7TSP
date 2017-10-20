@@ -10,7 +10,7 @@ public class Statistics {
 		ResultSet result = null;
 		try {
 			state = con.createStatement();
-			result = state.executeQuery("select distinct POP100 from Migeo2010 where NAME = \"Crystal Falls township\"");
+			result = state.executeQuery("select distinct NAME, POP100 from Migeo2010 where NAME = \"Crystal Falls township\"");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

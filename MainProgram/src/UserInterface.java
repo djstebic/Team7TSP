@@ -20,8 +20,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -51,7 +54,7 @@ public class UserInterface extends Application {
 			final TextField editor = searchBox.getEditor();
 			final String selected = searchBox.getSelectionModel().getSelectedItem();
 
-			// This needs run on the GUI thread to avoid the error described
+			// This needs to run on the GUI thread to avoid the error described
 			// here: https://bugs.openjdk.java.net/browse/JDK-8081700.
 			Platform.runLater(() -> {
 				// If the no item in the list is selected or the selected item
@@ -89,7 +92,12 @@ public class UserInterface extends Application {
 				alert.showAndWait();
 			}
 		});
+		
+		
 		HBox testoutput = new HBox();
+		TableView<Stat> table = new TableView<Stat>();
+		table.setEditable(true);
+		
 		// Test button for SQL
 		Button test = new Button();
 		test.setText("Test");
@@ -103,16 +111,25 @@ public class UserInterface extends Application {
 					String output = null;
 					ResultSetMetaData rsmd = result.getMetaData();
 					int columnsNumber = rsmd.getColumnCount();
+					ObservableList<Stat> valueList = FXCollections.observableArrayList();
 					
 					while (result.next()) {
 						for (int i = 1; i <= columnsNumber; i++) {
-							String columnValue = result.getString(i);
+							//String value = result.getString(i);
+							
+							//System.out.println(value);
+							valueList.add(new Stat(result.getString(i)));
 							String columnName = rsmd.getColumnName(i);
 							// output += result.getString();
 							// output += "\n";
-							Label outputLabel = new Label("Population of Crystal Falls township"  + "\n" + columnValue);
-							outputLabel.setStyle("-fx-font-size: 20; -fx-text-inner-color: #000000; -fx-opacity: 1.0");
-							testoutput.getChildren().addAll(outputLabel);
+							TableColumn<Stat, String> column = new TableColumn<Stat, String>(columnName);
+							column.setCellValueFactory(new PropertyValueFactory<Stat, String>("stat"));
+							table.setItems(valueList);
+							table.getColumns().addAll(column);
+							
+							//Label outputLabel = new Label("Population of Crystal Falls township"  + "\n" + columnValue);
+							//outputLabel.setStyle("-fx-font-size: 20; -fx-text-inner-color: #000000; -fx-opacity: 1.0");
+							//testoutput.getChildren().addAll(outputLabel);
 						}
 					}
 				} catch (SQLException e) {
@@ -139,25 +156,26 @@ public class UserInterface extends Application {
 		bottom.setAlignment(Pos.CENTER);
 
 		// Output for testing
-		Label label1 = new Label("Output:");
-		testoutput.getChildren().addAll(label1);
+			//Label label1 = new Label("Output:");
+			//testoutput.getChildren().addAll(label1);
+		
 		testoutput.setSpacing(10);
 		testoutput.setAlignment(Pos.CENTER);
 		testoutput.setDisable(true);
 
 		// VBox to select what goes in table/graph
 		VBox attributes = new VBox();
+		
 		// List of buttons on left side (need list of things we want)
 		//Button att1 = new Button("att1");
-
-		//attributes.getChildren().add(att1);
+		//attributes.getChildren().addAll(table);
 		//attributes.setPadding(new Insets(5, 0, 0, 0));
 
 		// Sets things to areas of the border pane
 		bp.setTop(dropDownHBox);
 		bp.setLeft(attributes);
 		bp.setBottom(bottom);
-		bp.setCenter(testoutput);
+		bp.setCenter(table);
 		// add locations for buttons and graphs
 
 		Scene scene = new Scene(bp, 500, 500);

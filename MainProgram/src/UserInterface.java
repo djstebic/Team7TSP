@@ -131,8 +131,9 @@ public class UserInterface extends Application {
 							table.getColumns().add(column);							valueList.add(new Stat(result.getString(i)));
 						}
 					
-					table.setItems(valueList);
+					
 					}
+					table.setItems(valueList);
 				} catch (SQLException e) {
 
 					e.printStackTrace();

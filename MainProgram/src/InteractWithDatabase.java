@@ -72,7 +72,8 @@ public class InteractWithDatabase {
 	public static void main(String[] args) {
 		Statistics test = new Statistics();
 		try {
-			printData(test.getTotalPop());
+			String query = test.getMedianAgebySex();
+			printData(test.runQuery(query,"Crystal Falls township"));
 //			System.out.print("\n-------------------------------------------\n");
 //			printData(test.getWhitePopNotHisp());
 //			System.out.print("\n-------------------------------------------\n");

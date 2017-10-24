@@ -106,7 +106,8 @@ public class UserInterface extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				Statistics test = new Statistics();
-				ResultSet result = test.getTotalPop();
+				String query = test.getTotalPop();
+				ResultSet result = test.runQuery(query, "Crysal Falls township");
 				try {
 					String output = null;
 					ResultSetMetaData rsmd = result.getMetaData();
@@ -120,16 +121,12 @@ public class UserInterface extends Application {
 							//System.out.println(value);
 							valueList.add(new Stat(result.getString(i)));
 							String columnName = rsmd.getColumnName(i);
-							// output += result.getString();
-							// output += "\n";
+
 							TableColumn<Stat, String> column = new TableColumn<Stat, String>(columnName);
 							column.setCellValueFactory(new PropertyValueFactory<Stat, String>("stat"));
 							table.setItems(valueList);
 							table.getColumns().addAll(column);
-							
-							//Label outputLabel = new Label("Population of Crystal Falls township"  + "\n" + columnValue);
-							//outputLabel.setStyle("-fx-font-size: 20; -fx-text-inner-color: #000000; -fx-opacity: 1.0");
-							//testoutput.getChildren().addAll(outputLabel);
+
 						}
 					}
 				} catch (SQLException e) {

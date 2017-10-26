@@ -106,14 +106,13 @@ public class UserInterface extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				Statistics test = new Statistics();
-				String query = test.getTotalPop();
+				String query = test.getMedianAgebySex();
 				ResultSet result = test.runQuery(query, "Crysal Falls township");
 				try {
 					String output = null;
 					ResultSetMetaData rsmd = result.getMetaData();
 					int columnsNumber = rsmd.getColumnCount();
 					ObservableList<Stat> valueList = FXCollections.observableArrayList();
-					
 					while (result.next()) {
 						for (int i = 1; i <= columnsNumber; i++) {
 							//String value = result.getString(i);

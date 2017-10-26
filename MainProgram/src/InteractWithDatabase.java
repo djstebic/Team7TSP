@@ -59,11 +59,9 @@ public class InteractWithDatabase {
 			System.out.printf("%-12.10s",rsmd.getColumnName(i));
 		}
 		System.out.println();
-		
 		while (toPrint.next()) {
 			for (int i = 1; i <= columnsNumber; i++) {
-				String columnValue = toPrint.getString(i);
-				System.out.printf("%-12.10s", columnValue);
+				System.out.printf("%-12.10s",  toPrint.getString(i));
 			}
 			System.out.println("");
 		}
@@ -72,14 +70,12 @@ public class InteractWithDatabase {
 	public static void main(String[] args) {
 		Statistics test = new Statistics();
 		try {
-			String query = test.getMedianAgebySex();
+
+			String query = test.getAllPop();
 			printData(test.runQuery(query,"Crystal Falls township"));
 //			System.out.print("\n-------------------------------------------\n");
-//			printData(test.getWhitePopNotHisp());
-//			System.out.print("\n-------------------------------------------\n");
-//			printData(test.getAfricanPop());
-//			System.out.print("\n-------------------------------------------\n");
-
+//			query = test.getTotalPop();
+//			printData(test.runQuery(query,"Crystal Falls township"));
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

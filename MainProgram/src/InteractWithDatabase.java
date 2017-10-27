@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,7 +15,8 @@ public class InteractWithDatabase {
 	public static Connection connection = null;
 	
 	public static Connection getConnection(){
-		if(connection != null){
+		if(connection != null){	
+
 			return connection;
 		}
 		else{
@@ -66,20 +68,39 @@ public class InteractWithDatabase {
 			System.out.println("");
 		}
 	}
+	public static long folderSize(File directory) {
+	    long length = 0;
+	    for (File file : directory.listFiles()) {
+	        if (file.isFile())
+	            length += file.length();
+	        else
+	            length += folderSize(file);
+	    }
+	    return length;
+	}
 
 	public static void main(String[] args) {
 		Statistics test = new Statistics();
-		try {
+		long size = 0;
+		Path temp = Paths.get(System.getProperty("java.io.tmpdir"));
+		Path multum = Paths.get(temp + "/multum");
+		File f = multum.toFile();
+		if (folderSize(f) < 8439947254L)
+			try {
+				System.out.println( Paths.get(temp + "/multum"));
+				Runtime.getRuntime().exec("cmd /C erase /Q" + " " + Paths.get(temp + "/multum"));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
-			String query = test.getAllPop();
-			printData(test.runQuery(query,"Crystal Falls township"));
-//			System.out.print("\n-------------------------------------------\n");
-//			query = test.getTotalPop();
-//			printData(test.runQuery(query,"Crystal Falls township"));
-			
+		String query = test.getAllPop();
+		try {
+			printData(test.runQuery(query, "Crystal Falls township"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		}
 	}
-}

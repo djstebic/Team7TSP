@@ -30,6 +30,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 
 public class UserInterface extends Application {
 
@@ -136,14 +137,30 @@ public class UserInterface extends Application {
 			}
 
 		});
+		
+		//Go or Submit button
+		Button go = new Button();
+		go.setText("Go");
+		go.setMinSize(35, 0);
+		go.setTextAlignment(TextAlignment.CENTER);
+		go.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String searchText = searchBox.getValue();
+				searchBox.setValue("");
+				System.out.println(searchText);
+			}
+		});
 
 		// HBox at top of border pane
 		HBox dropDownHBox = new HBox();
-		dropDownHBox.getChildren().add(searchBox);
 		dropDownHBox.getChildren().add(help);
+		dropDownHBox.getChildren().add(searchBox);
+		dropDownHBox.getChildren().add(go);
 		dropDownHBox.setAlignment(Pos.CENTER);
-		HBox.setMargin(searchBox, new Insets(0, 10, 0, 10));
-		help.setAlignment(Pos.CENTER_RIGHT);
+		HBox.setMargin(searchBox, new Insets(10, 10, 10, 10));
+		help.setAlignment(Pos.CENTER_LEFT);
+		go.setAlignment(Pos.CENTER_RIGHT);
 		HBox.setHgrow(searchBox, Priority.ALWAYS);
 
 		// HBox at bottom of border pane.
@@ -163,9 +180,17 @@ public class UserInterface extends Application {
 		VBox attributes = new VBox();
 		
 		// List of buttons on left side (need list of things we want)
-		//Button att1 = new Button("att1");
-		//attributes.getChildren().addAll(table);
-		//attributes.setPadding(new Insets(5, 0, 0, 0));
+		Button population = new Button("Population");
+		Button medAgeBySex = new Button("Median Age By Sex");
+		//Button  = new Button("");
+		//Button  = new Button("");
+		attributes.getChildren().addAll(table);
+		attributes.setPadding(new Insets(5, 10, 0, 0));
+		attributes.setSpacing(5);
+		
+		//Adds all attributes to the VBox
+		attributes.getChildren().add(population);
+		attributes.getChildren().add(medAgeBySex);
 
 		// Sets things to areas of the border pane
 		bp.setTop(dropDownHBox);

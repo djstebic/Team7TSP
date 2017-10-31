@@ -54,7 +54,7 @@ public class InteractWithDatabase {
 	    return null;
 	}
 	
-	public static void printData(ResultSet toPrint) throws SQLException{
+	public void printData(ResultSet toPrint) throws SQLException{
 		ResultSetMetaData rsmd = toPrint.getMetaData();
 		int columnsNumber = rsmd.getColumnCount();
 		for (int i = 1; i <= columnsNumber; i++) {
@@ -81,6 +81,7 @@ public class InteractWithDatabase {
 
 	public static void main(String[] args) {
 		Statistics test = new Statistics();
+		InteractWithDatabase prt = new InteractWithDatabase();
 		long size = 0;
 		Path temp = Paths.get(System.getProperty("java.io.tmpdir"));
 		Path multum = Paths.get(temp + "/multum");
@@ -96,7 +97,7 @@ public class InteractWithDatabase {
 
 		String query = test.getMedianHouseholdIncome();
 		try {
-			printData(test.runQuery(query, "Crystal Falls township"));
+		prt.printData(test.runQuery(query, "Crystal Falls township"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

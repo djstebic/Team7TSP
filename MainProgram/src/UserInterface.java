@@ -7,6 +7,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.apache.commons.lang.StringUtils;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -30,6 +32,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class UserInterface extends Application {
@@ -94,7 +98,6 @@ public class UserInterface extends Application {
 			}
 		});
 		
-		
 		HBox testoutput = new HBox();
 		TableView<Stat> table = new TableView<Stat>();
 		table.setEditable(true);
@@ -102,42 +105,51 @@ public class UserInterface extends Application {
 		// Test button for SQL
 		Button test = new Button();
 		test.setText("Test");
+		Text printer = new Text();
+		printer.setFont(Font.font("Courier New"));
 		test.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent event) {
 				Statistics test = new Statistics();
-				String query = test.getMedianAgebySex();
-				ResultSet result = test.runQuery(query, "Crysal Falls township");
+				String query = test.getAllPop();
+				ResultSet result = test.runQuery(query, "Crystal Falls township");
 				try {
-					String output = null;
-					ResultSetMetaData rsmd = result.getMetaData();
-					int columnsNumber = rsmd.getColumnCount();
-					ObservableList<Stat> valueList = FXCollections.observableArrayList();
-					while (result.next()) {
-						for (int i = 1; i <= columnsNumber; i++) {
-							//String value = result.getString(i);
+					printer.setText(displayData(result));
+					InteractWithDatabase st = new InteractWithDatabase();
+					System.out.println(displayData(result));
 							
-							//System.out.println(value);
-							valueList.add(new Stat(result.getString(i)));
-							String columnName = rsmd.getColumnName(i);
-
-							TableColumn<Stat, String> column = new TableColumn<Stat, String>(columnName);
-							column.setCellValueFactory(new PropertyValueFactory<Stat, String>("stat"));
-							table.setItems(valueList);
-							table.getColumns().addAll(column);
-
-						}
-					}
-				} catch (SQLException e) {
-
-					e.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
+//				try {
+//					String output = null;
+//					ResultSetMetaData rsmd = result.getMetaData();
+//					int columnsNumber = rsmd.getColumnCount();
+//					ObservableList<Stat> valueList = FXCollections.observableArrayList();
+//					while (result.next()) {
+//						for (int i = 1; i <= columnsNumber; i++) {
+//							//String value = result.getString(i);
+//							
+//							//System.out.println(value);
+//							valueList.add(new Stat(result.getString(i)));
+//							String columnName = rsmd.getColumnName(i);
+//
+//							TableColumn<Stat, String> column = new TableColumn<Stat, String>(columnName);
+//							column.setCellValueFactory(new PropertyValueFactory<Stat, String>("stat"));
+//							table.setItems(valueList);
+//							table.getColumns().addAll(column);
+//
+//						}
+//					}
+//				} catch (SQLException e) {
+//
+//					e.printStackTrace();
+//				}
 
 			}
 
 		});
-		
 		//Go or Submit button
 		Button go = new Button();
 		go.setText("Go");
@@ -184,7 +196,8 @@ public class UserInterface extends Application {
 		Button medAgeBySex = new Button("Median Age By Sex");
 		//Button  = new Button("");
 		//Button  = new Button("");
-		attributes.getChildren().addAll(table);
+//		attributes.getChildren().addAll(table);
+		attributes.getChildren().addAll(printer);
 		attributes.setPadding(new Insets(5, 10, 0, 0));
 		attributes.setSpacing(5);
 		
@@ -196,7 +209,8 @@ public class UserInterface extends Application {
 		bp.setTop(dropDownHBox);
 		bp.setLeft(attributes);
 		bp.setBottom(bottom);
-		bp.setCenter(table);
+//		bp.setCenter(table);
+		bp.setCenter(printer);
 		// add locations for buttons and graphs
 
 		Scene scene = new Scene(bp, 500, 500);
@@ -223,8 +237,34 @@ public class UserInterface extends Application {
 		}
 		return townships;
 	}
+	
+	public static String displayData(ResultSet toPrint) throws SQLException{
+		ResultSetMetaData rsmd = toPrint.getMetaData();
+		int columnsNumber = rsmd.getColumnCount();
+		String out = "";
+		for (int i = 1; i <= columnsNumber; i++) {
+			out = out + rsmd.getColumnName(i).substring(0,((rsmd.getColumnName(i).length() < 10) ? rsmd.getColumnName(i).length() : 10));
+			out = out + StringUtils.repeat(" ", 15 - rsmd.getColumnName(i).length());
+		}
+		out = out + "\n";
+		while (toPrint.next()) {
+			for (int i = 1; i <= columnsNumber; i++) {
+				out = out + toPrint.getString(i).substring(0, ((toPrint.getString(i).length() < 10) ? toPrint.getString(i).length() : 10));
+				out = out + StringUtils.repeat(" ", 15 - toPrint.getString(i).length());
+			}
+			out = out + "\n";
+		}
+		return out;
+	}
 
 	public static void main(String[] args) {
+		Statistics test = new Statistics();
+		try {
+			displayData(test.runQuery(test.getAllPop(),"Crystal Falls township"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		launch(args);
 	}
 

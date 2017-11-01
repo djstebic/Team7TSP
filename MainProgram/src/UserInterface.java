@@ -37,7 +37,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class UserInterface extends Application {
-
+	boolean allPop = false;
+	boolean medAge = false;
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("BorderPane");
@@ -105,19 +106,24 @@ public class UserInterface extends Application {
 		// Test button for SQL
 		Button test = new Button();
 		test.setText("Test");
-		Text printer = new Text();
-		printer.setFont(Font.font("Courier New"));
+
 		test.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				Label printer = new Label();
+				printer.setFont(Font.font("Courier New"));
 				Statistics test = new Statistics();
-				String query = test.getAllPop();
+				String query = "";
+				if(medAge)
+					query = test.getMedianAgebySex();
+				if(allPop)
+					query = test.getAllPop();
 				ResultSet result = test.runQuery(query, "Crystal Falls township");
 				try {
 					printer.setText(displayData(result));
 					InteractWithDatabase st = new InteractWithDatabase();
-					System.out.println(displayData(result));
-							
+					System.out.println(displayData(result));	
+					bp.setCenter(printer);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -193,11 +199,31 @@ public class UserInterface extends Application {
 		
 		// List of buttons on left side (need list of things we want)
 		Button population = new Button("Population");
+		population.setOnAction(new  EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				if(allPop == false)
+					allPop = true;
+				else allPop = false;
+			}
+			
+		});
 		Button medAgeBySex = new Button("Median Age By Sex");
+		medAgeBySex.setOnAction(new  EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				if(medAge == false){
+					medAge = true;
+				}
+				else medAge = false;
+			}
+			
+		});
 		//Button  = new Button("");
 		//Button  = new Button("");
 //		attributes.getChildren().addAll(table);
-		attributes.getChildren().addAll(printer);
 		attributes.setPadding(new Insets(5, 10, 0, 0));
 		attributes.setSpacing(5);
 		
@@ -210,7 +236,7 @@ public class UserInterface extends Application {
 		bp.setLeft(attributes);
 		bp.setBottom(bottom);
 //		bp.setCenter(table);
-		bp.setCenter(printer);
+
 		// add locations for buttons and graphs
 
 		Scene scene = new Scene(bp, 500, 500);

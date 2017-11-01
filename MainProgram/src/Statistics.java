@@ -46,7 +46,7 @@ public class Statistics {
 	}
 	
 	public String getMedianHouseholdIncome(){
-		return "select distinct P053001 from Migeo inner join Mi00006 on (Migeo.LOGRECNO = Mi00006.LOGRECNO) where NAME = ";
+		return "select distinct P053001 from Migeo inner join Mi00006 on (Migeo.LOGRECNO = Mi00006.LOGRECNO) where NAME =";
 	}
 	
 	public ResultSet getTownships(){

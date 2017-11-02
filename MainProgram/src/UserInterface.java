@@ -104,58 +104,6 @@ public class UserInterface extends Application {
 		table.setEditable(true);
 		
 		// Test button for SQL
-		Button test = new Button();
-		test.setText("Test");
-
-		test.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Label printer = new Label();
-				printer.setFont(Font.font("Courier New"));
-				Statistics test = new Statistics();
-				String query = "";
-				if(medAge)
-					query = test.getMedianAgebySex();
-				if(allPop)
-					query = test.getAllPop();
-				ResultSet result = test.runQuery(query, "Crystal Falls township");
-				try {
-					printer.setText(displayData(result));
-					InteractWithDatabase st = new InteractWithDatabase();
-					System.out.println(displayData(result));	
-					bp.setCenter(printer);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-//				try {
-//					String output = null;
-//					ResultSetMetaData rsmd = result.getMetaData();
-//					int columnsNumber = rsmd.getColumnCount();
-//					ObservableList<Stat> valueList = FXCollections.observableArrayList();
-//					while (result.next()) {
-//						for (int i = 1; i <= columnsNumber; i++) {
-//							//String value = result.getString(i);
-//							
-//							//System.out.println(value);
-//							valueList.add(new Stat(result.getString(i)));
-//							String columnName = rsmd.getColumnName(i);
-//
-//							TableColumn<Stat, String> column = new TableColumn<Stat, String>(columnName);
-//							column.setCellValueFactory(new PropertyValueFactory<Stat, String>("stat"));
-//							table.setItems(valueList);
-//							table.getColumns().addAll(column);
-//
-//						}
-//					}
-//				} catch (SQLException e) {
-//
-//					e.printStackTrace();
-//				}
-
-			}
-
-		});
 		//Go or Submit button
 		Button go = new Button();
 		go.setText("Go");
@@ -165,8 +113,25 @@ public class UserInterface extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				String searchText = searchBox.getValue();
-				searchBox.setValue("");
-				System.out.println(searchText);
+				Label printer = new Label();
+				printer.setFont(Font.font("Courier New"));
+				Statistics test = new Statistics();
+				String query = "";
+				if(medAge && allPop)
+					query =  test.getPopandMedAge();
+				else if(medAge)
+					query = test.getMedianAgebySex();
+				else if(allPop)
+					query = test.getAllPop();
+				ResultSet result = test.runQuery(query, searchText);
+				try {
+					printer.setText(displayData(result));
+					System.out.println(displayData(result));	
+					bp.setCenter(printer);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 
@@ -183,7 +148,6 @@ public class UserInterface extends Application {
 
 		// HBox at bottom of border pane.
 		HBox bottom = new HBox();
-		bottom.getChildren().add(test);
 		bottom.setAlignment(Pos.CENTER);
 
 		// Output for testing
@@ -239,7 +203,7 @@ public class UserInterface extends Application {
 
 		// add locations for buttons and graphs
 
-		Scene scene = new Scene(bp, 500, 500);
+		Scene scene = new Scene(bp, 1000, 500);
 		scene.getStylesheets().add("CSS.css");
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -266,17 +230,24 @@ public class UserInterface extends Application {
 	
 	public static String displayData(ResultSet toPrint) throws SQLException{
 		ResultSetMetaData rsmd = toPrint.getMetaData();
+		boolean go1 = true;
+		boolean go2 = true;
 		int columnsNumber = rsmd.getColumnCount();
 		String out = "";
 		for (int i = 1; i <= columnsNumber; i++) {
 			out = out + rsmd.getColumnName(i).substring(0,((rsmd.getColumnName(i).length() < 10) ? rsmd.getColumnName(i).length() : 10));
-			out = out + StringUtils.repeat(" ", 15 - rsmd.getColumnName(i).length());
+			out = out + StringUtils.repeat(" ", 10 - rsmd.getColumnName(i).length());
+			if(i != columnsNumber)
+				out = out + " |   ";
+
 		}
 		out = out + "\n";
 		while (toPrint.next()) {
 			for (int i = 1; i <= columnsNumber; i++) {
 				out = out + toPrint.getString(i).substring(0, ((toPrint.getString(i).length() < 10) ? toPrint.getString(i).length() : 10));
-				out = out + StringUtils.repeat(" ", 15 - toPrint.getString(i).length());
+				out = out + StringUtils.repeat(" ", 10 - toPrint.getString(i).length());
+				if(i != columnsNumber)
+					out = out + " |   ";
 			}
 			out = out + "\n";
 		}

@@ -95,7 +95,7 @@ public class InteractWithDatabase {
 				e1.printStackTrace();
 			}
 
-		String query = test.getMedianHouseholdIncome();
+		String query = test.getPopandMedAge();
 		try {
 		prt.printData(test.runQuery(query, "Crystal Falls township"));
 		} catch (SQLException e) {

@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -25,6 +26,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
@@ -39,6 +41,8 @@ import javafx.scene.text.TextAlignment;
 public class UserInterface extends Application {
 	boolean allPop = false;
 	boolean medAge = false;
+	
+	
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("BorderPane");
@@ -103,7 +107,33 @@ public class UserInterface extends Application {
 		TableView<Stat> table = new TableView<Stat>();
 		table.setEditable(true);
 		
-		// Test button for SQL
+		// List of buttons on left side (need list of things we want)
+		ToggleButton population = new ToggleButton("Population");
+//		population.setOnAction(new  EventHandler<ActionEvent>() {
+//
+//			@Override
+//			public void handle(ActionEvent arg0) {
+//				if(allPop == false)
+//					allPop = true;
+//				else allPop = false;
+//			}
+//			
+//		});
+		ToggleButton medAgeBySex = new ToggleButton("Median Age By Sex");
+//		medAgeBySex.setOnAction(new  EventHandler<ActionEvent>() {
+//
+//			@Override
+//			public void handle(ActionEvent arg0) {
+//				if(medAge == false){
+//					medAge = true;
+//				}
+//				else medAge = false;
+//			}
+//			
+//		});
+		
+		
+		
 		//Go or Submit button
 		Button go = new Button();
 		go.setText("Go");
@@ -117,17 +147,20 @@ public class UserInterface extends Application {
 				printer.setFont(Font.font("Courier New"));
 				Statistics test = new Statistics();
 				String query = "";
-				if(medAge && allPop)
+				if(population.isSelected() && medAgeBySex.isSelected())
 					query =  test.getPopandMedAge();
-				else if(medAge)
+				else if(medAgeBySex.isSelected())
 					query = test.getMedianAgebySex();
-				else if(allPop)
+				else if(population.isSelected())
 					query = test.getAllPop();
+				
 				ResultSet result = test.runQuery(query, searchText);
 				try {
 					printer.setText(displayData(result));
 					System.out.println(displayData(result));	
 					bp.setCenter(printer);
+					
+					
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -149,10 +182,6 @@ public class UserInterface extends Application {
 		// HBox at bottom of border pane.
 		HBox bottom = new HBox();
 		bottom.setAlignment(Pos.CENTER);
-
-		// Output for testing
-			//Label label1 = new Label("Output:");
-			//testoutput.getChildren().addAll(label1);
 		
 		testoutput.setSpacing(10);
 		testoutput.setAlignment(Pos.CENTER);
@@ -161,33 +190,11 @@ public class UserInterface extends Application {
 		// VBox to select what goes in table/graph
 		VBox attributes = new VBox();
 		
-		// List of buttons on left side (need list of things we want)
-		Button population = new Button("Population");
-		population.setOnAction(new  EventHandler<ActionEvent>() {
 
-			@Override
-			public void handle(ActionEvent arg0) {
-				if(allPop == false)
-					allPop = true;
-				else allPop = false;
-			}
-			
-		});
-		Button medAgeBySex = new Button("Median Age By Sex");
-		medAgeBySex.setOnAction(new  EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				if(medAge == false){
-					medAge = true;
-				}
-				else medAge = false;
-			}
-			
-		});
+		
 		//Button  = new Button("");
 		//Button  = new Button("");
-//		attributes.getChildren().addAll(table);
+		//attributes.getChildren().addAll(table);
 		attributes.setPadding(new Insets(5, 10, 0, 0));
 		attributes.setSpacing(5);
 		
@@ -199,7 +206,7 @@ public class UserInterface extends Application {
 		bp.setTop(dropDownHBox);
 		bp.setLeft(attributes);
 		bp.setBottom(bottom);
-//		bp.setCenter(table);
+		//bp.setCenter(table);
 
 		// add locations for buttons and graphs
 
@@ -235,8 +242,8 @@ public class UserInterface extends Application {
 		int columnsNumber = rsmd.getColumnCount();
 		String out = "";
 		for (int i = 1; i <= columnsNumber; i++) {
-			out = out + rsmd.getColumnName(i).substring(0,((rsmd.getColumnName(i).length() < 10) ? rsmd.getColumnName(i).length() : 10));
-			out = out + StringUtils.repeat(" ", 10 - rsmd.getColumnName(i).length());
+			out = out + rsmd.getColumnLabel(i).substring(0,((rsmd.getColumnLabel(i).length() < 15) ? rsmd.getColumnLabel(i).length() : 15));
+			out = out + StringUtils.repeat(" ", 15 - rsmd.getColumnLabel(i).length());
 			if(i != columnsNumber)
 				out = out + " |   ";
 
@@ -244,8 +251,8 @@ public class UserInterface extends Application {
 		out = out + "\n";
 		while (toPrint.next()) {
 			for (int i = 1; i <= columnsNumber; i++) {
-				out = out + toPrint.getString(i).substring(0, ((toPrint.getString(i).length() < 10) ? toPrint.getString(i).length() : 10));
-				out = out + StringUtils.repeat(" ", 10 - toPrint.getString(i).length());
+				out = out + toPrint.getString(i).substring(0, ((toPrint.getString(i).length() < 15) ? toPrint.getString(i).length() : 15));
+				out = out + StringUtils.repeat(" ", 15 - toPrint.getString(i).length());
 				if(i != columnsNumber)
 					out = out + " |   ";
 			}

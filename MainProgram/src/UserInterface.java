@@ -108,6 +108,7 @@ public class UserInterface extends Application {
 		HBox testoutput = new HBox();
 		TableView<List<Object>> table = new TableView<List<Object>>();
 		table.setEditable(true);
+		table.setColumnResizePolicy((param) -> true);
 		
 		// List of buttons on left side (need list of things we want)
 		ToggleButton population = new ToggleButton("Population");
@@ -171,6 +172,11 @@ public class UserInterface extends Application {
 			}
 		});
 
+		
+		// Test button for adding rows.
+		//Button
+		
+		
 		// HBox at top of border pane
 		HBox dropDownHBox = new HBox();
 		dropDownHBox.getChildren().add(help);

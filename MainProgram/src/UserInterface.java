@@ -161,14 +161,6 @@ public class UserInterface extends Application {
 				
 			}
 		});
-<<<<<<< HEAD
-=======
-
-		
-		// Test button for adding rows.
-		//Button
-		
->>>>>>> 8d6719c49bda197ca0016d3d24408dfadbdb6799
 		
 		// HBox at top of border pane
 		HBox dropDownHBox = new HBox();

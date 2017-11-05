@@ -6,12 +6,14 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -104,34 +106,13 @@ public class UserInterface extends Application {
 		});
 		
 		HBox testoutput = new HBox();
-		TableView<Stat> table = new TableView<Stat>();
+		TableView<List<Object>> table = new TableView<List<Object>>();
 		table.setEditable(true);
 		
 		// List of buttons on left side (need list of things we want)
 		ToggleButton population = new ToggleButton("Population");
-//		population.setOnAction(new  EventHandler<ActionEvent>() {
-//
-//			@Override
-//			public void handle(ActionEvent arg0) {
-//				if(allPop == false)
-//					allPop = true;
-//				else allPop = false;
-//			}
-//			
-//		});
 		ToggleButton medAgeBySex = new ToggleButton("Median Age By Sex");
-//		medAgeBySex.setOnAction(new  EventHandler<ActionEvent>() {
-//
-//			@Override
-//			public void handle(ActionEvent arg0) {
-//				if(medAge == false){
-//					medAge = true;
-//				}
-//				else medAge = false;
-//			}
-//			
-//		});
-		
+
 		
 		
 		//Go or Submit button
@@ -142,6 +123,8 @@ public class UserInterface extends Application {
 		go.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				table.getColumns().clear();
+				
 				String searchText = searchBox.getValue();
 				Label printer = new Label();
 				printer.setFont(Font.font("Courier New"));
@@ -155,16 +138,36 @@ public class UserInterface extends Application {
 					query = test.getAllPop();
 				
 				ResultSet result = test.runQuery(query, searchText);
+//				try {
+//					printer.setText(displayData(result));
+//					System.out.println(displayData(result));	
+//					bp.setCenter(printer);
+//					
+//					
+//				} catch (SQLException e1) {
+//					e1.printStackTrace();
+//				}
+				
 				try {
-					printer.setText(displayData(result));
-					System.out.println(displayData(result));	
-					bp.setCenter(printer);
-					
-					
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				Statistics stat = new Statistics();
+				 Stat stats = stat.getAllData(query, searchText);
+				 
+				 for(int i = 0; i < stats.getNumColumns(); i++) {
+					 TableColumn<List<Object>, Object> column = new TableColumn<>(stats.getColumnName(i));
+					 int columnIndex = i;
+					 column.setCellValueFactory(cellData ->
+					 new SimpleObjectProperty<>(cellData.getValue().get(columnIndex)));
+					 table.getColumns().add(column);
+				 }
+				 
+				 table.getItems().setAll(stats.getStat());
+				 
+				 
+				} catch (SQLException e2) {
+					e2.printStackTrace();
 				}
+				
+				
 			}
 		});
 
@@ -194,7 +197,7 @@ public class UserInterface extends Application {
 		
 		//Button  = new Button("");
 		//Button  = new Button("");
-		//attributes.getChildren().addAll(table);
+		attributes.getChildren().addAll(table);
 		attributes.setPadding(new Insets(5, 10, 0, 0));
 		attributes.setSpacing(5);
 		
@@ -206,7 +209,7 @@ public class UserInterface extends Application {
 		bp.setTop(dropDownHBox);
 		bp.setLeft(attributes);
 		bp.setBottom(bottom);
-		//bp.setCenter(table);
+		bp.setCenter(table);
 
 		// add locations for buttons and graphs
 

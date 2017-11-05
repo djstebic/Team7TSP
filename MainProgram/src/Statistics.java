@@ -15,7 +15,6 @@ public class Statistics {
 		return "select distinct P0030002 from Migeo2010 INNER JOIN  SF1_00003 ON (Migeo2010.LOGRECNO = SF1_00003.LOGRECNO ) where NAME =";
 
 	}
-
 	// public String getAfricanPop(){
 	// String query = "select distinct P0050004 from Migeo2010 INNER JOIN
 	// SF1_00003 ON (Migeo2010.LOGRECNO = SF1_00003.LOGRECNO ) where NAME =";
@@ -60,6 +59,11 @@ public class Statistics {
 	public String getMedianAgebySex() {
 		return "SELECT distinct NAME, P0130001 as [Median Age], P0130002 as [Med. Age Male], P0130003 as [Med. Age Female] from Migeo2010 inner join SF1_00004 on (Migeo2010.LOGRECNO = SF1_00004.LOGRECNO ) where NAME =";
 	}
+	
+	public String getAggregateHouseholdIncome(){
+		return "select distinct P054001 from Migeo inner join Mi00006 on (Migeo.LOGRECNO = Mi00006.LOGRECNO) where NAME =";
+	}
+	
 
 	public ResultSet getTownships() {
 		Connection con = InteractWithDatabase.getConnection();
@@ -88,7 +92,7 @@ public class Statistics {
 		}
 		return result;
 	}
-
+	
 	public Stat getAllData(String query, String location) throws SQLException {
 		Connection con = InteractWithDatabase.getConnection();
 

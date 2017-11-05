@@ -22,8 +22,8 @@ public class InteractWithDatabase {
 		else{
 			try {
 				Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-				String msAccDB = "D:\\Census Database\\SF1_Access2007.accdb";
-				//String msAccDB = "data/SF1_Access2007_1.accdb";
+//				String msAccDB = "D:\\Census Database\\SF1_Access2007.accdb";
+				String msAccDB = "data/SF1_Access2007_1.accdb";
 				String dbURL = "jdbc:ucanaccess://" + msAccDB + ";keepMirror=" + getPathToMirror() + ",singleconnection=true";
 				connection = DriverManager.getConnection(dbURL);
 			} catch (ClassNotFoundException cnfex) {

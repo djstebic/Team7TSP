@@ -112,6 +112,7 @@ public class UserInterface extends Application {
 		// List of buttons on left side (need list of things we want)
 		ToggleButton population = new ToggleButton("Population");
 		ToggleButton medAgeBySex = new ToggleButton("Median Age By Sex");
+		ToggleButton income =  new ToggleButton("Income");
 
 		
 		
@@ -124,8 +125,8 @@ public class UserInterface extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				table.getColumns().clear();
-				
 				String searchText = searchBox.getValue();
+//				searchBox.getEditor().clear();
 				Label printer = new Label();
 				printer.setFont(Font.font("Courier New"));
 				Statistics test = new Statistics();
@@ -136,18 +137,6 @@ public class UserInterface extends Application {
 					query = test.getMedianAgebySex();
 				else if(population.isSelected())
 					query = test.getAllPop();
-				
-				ResultSet result = test.runQuery(query, searchText);
-//				try {
-//					printer.setText(displayData(result));
-//					System.out.println(displayData(result));	
-//					bp.setCenter(printer);
-//					
-//					
-//				} catch (SQLException e1) {
-//					e1.printStackTrace();
-//				}
-				
 				try {
 				Statistics stat = new Statistics();
 				 Stat stats = stat.getAllData(query, searchText);
@@ -157,11 +146,12 @@ public class UserInterface extends Application {
 					 int columnIndex = i;
 					 column.setCellValueFactory(cellData ->
 					 new SimpleObjectProperty<>(cellData.getValue().get(columnIndex)));
+					 table.setColumnResizePolicy((param) -> true);
 					 table.getColumns().add(column);
 				 }
 				 
-				 table.getItems().setAll(stats.getStat());
-				 
+//				 table.getItems().setAll(stats.getStat());
+				 table.getItems().addAll(stats.getStat());
 				 
 				} catch (SQLException e2) {
 					e2.printStackTrace();
@@ -170,7 +160,7 @@ public class UserInterface extends Application {
 				
 			}
 		});
-
+		
 		// HBox at top of border pane
 		HBox dropDownHBox = new HBox();
 		dropDownHBox.getChildren().add(help);
@@ -185,7 +175,17 @@ public class UserInterface extends Application {
 		// HBox at bottom of border pane.
 		HBox bottom = new HBox();
 		bottom.setAlignment(Pos.CENTER);
-		
+		Button clear = new Button("Clear");
+		clear.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				table.getColumns().clear();
+				table.getItems().clear();
+				
+			}
+			
+		});
 		testoutput.setSpacing(10);
 		testoutput.setAlignment(Pos.CENTER);
 		testoutput.setDisable(true);
@@ -204,6 +204,7 @@ public class UserInterface extends Application {
 		//Adds all attributes to the VBox
 		attributes.getChildren().add(population);
 		attributes.getChildren().add(medAgeBySex);
+		attributes.getChildren().add(clear);
 
 		// Sets things to areas of the border pane
 		bp.setTop(dropDownHBox);

@@ -127,7 +127,7 @@ public class UserInterface extends Application {
 			public void handle(ActionEvent event) {
 				table.getColumns().clear();
 				String searchText = searchBox.getValue();
-//				searchBox.getEditor().clear();
+				searchBox.getEditor().clear();
 				Label printer = new Label();
 				printer.setFont(Font.font("Courier New"));
 				Statistics test = new Statistics();
@@ -161,14 +161,7 @@ public class UserInterface extends Application {
 				
 			}
 		});
-<<<<<<< HEAD
-=======
 
-		
-		// Test button for adding rows.
-		//Button
-		
->>>>>>> 8d6719c49bda197ca0016d3d24408dfadbdb6799
 		
 		// HBox at top of border pane
 		HBox dropDownHBox = new HBox();
@@ -206,23 +199,38 @@ public class UserInterface extends Application {
 		
 		//Button  = new Button("");
 		//Button  = new Button("");
-		attributes.getChildren().addAll(table);
+		//attributes.getChildren().addAll(table);
 		attributes.setPadding(new Insets(5, 10, 0, 0));
 		attributes.setSpacing(5);
 		
 		//Adds all attributes to the VBox
 		attributes.getChildren().add(population);
 		attributes.getChildren().add(medAgeBySex);
-		attributes.getChildren().add(clear);
+		//bottom.getChildren().add(clear);
 
+		
+		//Middle VBox for table and clear button.
+		VBox vTable = new VBox();
+		HBox hTable = new HBox();
+		StackPane stack = new StackPane();
+		stack.getChildren().add(clear);
+		stack.setAlignment(Pos.BOTTOM_CENTER);
+		hTable.getChildren().add(stack);
+		hTable.setAlignment(Pos.BOTTOM_CENTER);
+		vTable.getChildren().addAll(table, hTable);
+		
+		
+		
+		
+		
 		// Sets things to areas of the border pane
 		bp.setTop(dropDownHBox);
 		bp.setLeft(attributes);
 		bp.setBottom(bottom);
-		bp.setCenter(table);
-
+		bp.setCenter(vTable);
+		
+		
 		// add locations for buttons and graphs
-
 		Scene scene = new Scene(bp, 1000, 500);
 		scene.getStylesheets().add("CSS.css");
 		primaryStage.setScene(scene);

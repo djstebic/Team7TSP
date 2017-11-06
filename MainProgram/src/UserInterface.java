@@ -31,6 +31,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -162,6 +163,11 @@ public class UserInterface extends Application {
 			}
 		});
 
+		searchBox.setOnKeyPressed( e -> {
+			if(e.getCode() == KeyCode.ENTER) {
+				go.fire();
+			}
+		});
 		
 		// HBox at top of border pane
 		HBox dropDownHBox = new HBox();

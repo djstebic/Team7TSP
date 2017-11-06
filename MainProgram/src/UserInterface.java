@@ -218,7 +218,7 @@ public class UserInterface extends Application {
 		hTable.getChildren().add(stack);
 		hTable.setAlignment(Pos.BOTTOM_CENTER);
 		vTable.getChildren().addAll(table, hTable);
-		
+		vTable.setVgrow(table, Priority.ALWAYS);
 		
 		
 		

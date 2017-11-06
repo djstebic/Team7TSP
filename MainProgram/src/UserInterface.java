@@ -110,6 +110,7 @@ public class UserInterface extends Application {
 		TableView<List<Object>> table = new TableView<List<Object>>();
 		table.setEditable(true);
 		table.setColumnResizePolicy((param) -> true);
+		table.setPlaceholder(new Label("Please select a filter and type in name."));
 		
 		// List of buttons on left side (need list of things we want)
 		ToggleButton population = new ToggleButton("Population");
@@ -157,6 +158,7 @@ public class UserInterface extends Application {
 				 
 				} catch (SQLException e2) {
 					e2.printStackTrace();
+					table.setPlaceholder(new Label("Invalid Input or No Filter Selected"));
 				}
 				
 				

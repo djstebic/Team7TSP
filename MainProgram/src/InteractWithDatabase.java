@@ -95,7 +95,7 @@ public class InteractWithDatabase {
 				e1.printStackTrace();
 			}
 
-		String query = test.getPopandMedAge();
+		String query = test.getAll();
 		try {
 		prt.printData(test.runQuery(query, "Crystal Falls township"));
 		} catch (SQLException e) {

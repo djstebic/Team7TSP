@@ -49,7 +49,7 @@ public class Statistics {
 	}
 
 	public String getAllPop() {
-		return "select distinct NAME, P0030002 as [White Pop.], P0030003 as [Black Pop.], P0030004 as [Indian Pop.], P0030005 as [Asian Pop.], P0030006 as [Hawaiian Pop.],P0030007 as [Other Race Pop.], P0030008 as [Multi-Race Pop.] from Migeo2010 INNER JOIN  SF1_00003 ON (Migeo2010.LOGRECNO = SF1_00003.LOGRECNO ) where NAME =";
+		return "select distinct NAME,  POP100 as [Total Pop.], P0030002 as [White Pop.], P0030003 as [Black Pop.], P0030004 as [Indian Pop.], P0030005 as [Asian Pop.], P0030006 as [Hawaiian Pop.],P0030007 as [Other Race Pop.], P0030008 as [Multi-Race Pop.] from Migeo2010 INNER JOIN  SF1_00003 ON (Migeo2010.LOGRECNO = SF1_00003.LOGRECNO ) where NAME =";
 	}
 
 	public String getPopandMedAge() {
@@ -62,6 +62,13 @@ public class Statistics {
 	
 	public String getAggregateHouseholdIncome(){
 		return "select distinct P054001 from Migeo inner join Mi00006 on (Migeo.LOGRECNO = Mi00006.LOGRECNO) where NAME =";
+	}
+	
+	public String getTotalHouseholds(){
+		return "select distinct P0280001 as [Total Households] from Migeo2010 inner join SF1_00005 on (Migeo2010.LOGRECNO = SF1_00005.LOGRECNO) where NAME =";
+	}
+	public String getAll(){
+		return "SELECT distinct Migeo2010.NAME, P0130001 as [Median Age], P0130002 as [Med. Age Male], P0130003 as [Med. Age Female],P053001 as [Med. Income], POP100 as [Total Pop.], P0030002 as [White Pop.], P0030003 as [Black Pop.], P0030004 as [Indian Pop.], P0030005 as [Asian Pop.], P0030006 as [Hawaiian Pop.], P0030007  as [Other Race Pop.], P0030008 as [Multi-Race Pop.], P0280001 as [Total Households] from ((((Migeo2010 inner join SF1_00004 on (Migeo2010.LOGRECNO = SF1_00004.LOGRECNO)) inner join Migeo on (Migeo2010.NAME = Migeo.NAME))inner join Mi00006 on (Migeo.LOGRECNO = Mi00006.LOGRECNO)) inner join SF1_00003 on (Migeo2010.LOGRECNO = SF1_00003.LOGRECNO)) inner join SF1_00005 on (Migeo2010.LOGRECNO = SF1_00005.LOGRECNO) where Migeo2010.NAME =";
 	}
 	
 

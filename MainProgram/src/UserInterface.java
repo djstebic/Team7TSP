@@ -26,6 +26,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
@@ -40,6 +41,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.chart.*;
+import javafx.scene.chart.XYChart.Series;
 
 public class UserInterface extends Application {
 	boolean allPop = false;
@@ -92,6 +95,7 @@ public class UserInterface extends Application {
 		Button help = new Button();
 		help.getStyleClass().add("button-blue");
 		help.setText("?");
+		help.setTextAlignment(TextAlignment.CENTER);
 		help.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -116,13 +120,15 @@ public class UserInterface extends Application {
 		ToggleButton population = new ToggleButton("Population");
 		ToggleButton medAgeBySex = new ToggleButton("Median Age By Sex");
 		ToggleButton income =  new ToggleButton("Income");
-
+		
+		Button graph = new Button();
+		ArrayList<String> columnNamesData = new ArrayList<>();
 		
 		
 		//Go or Submit button
 		Button go = new Button();
 		go.setText("Go");
-		go.setMinSize(35, 0);
+		go.setMinSize(36, 0);
 		go.setTextAlignment(TextAlignment.CENTER);
 		go.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -151,8 +157,8 @@ public class UserInterface extends Application {
 					 new SimpleObjectProperty<>(cellData.getValue().get(columnIndex)));
 					 table.setColumnResizePolicy((param) -> true);
 					 table.getColumns().add(column);
+					 columnNamesData.add(column.getText());
 				 }
-				 
 //				 table.getItems().setAll(stats.getStat());
 				 table.getItems().addAll(stats.getStat());
 				 
@@ -214,6 +220,7 @@ public class UserInterface extends Application {
 		//Adds all attributes to the VBox
 		attributes.getChildren().add(population);
 		attributes.getChildren().add(medAgeBySex);
+		bottom.getChildren().add(graph);
 		//bottom.getChildren().add(clear);
 
 		
@@ -228,8 +235,47 @@ public class UserInterface extends Application {
 		vTable.getChildren().addAll(table, hTable);
 		vTable.setVgrow(table, Priority.ALWAYS);
 		
+		//Chart Stuffs
 		
+		graph.setText("Graph");
+		graph.setOnAction(new EventHandler<ActionEvent>() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void handle(ActionEvent arg0) {
+				CategoryAxis xAxis = new CategoryAxis();
+				NumberAxis yAxis = new NumberAxis();
+				BarChart<String,Number> bc = new BarChart<String,Number>(xAxis,yAxis);
+				bc.setTitle("Comparison Chart");
+				xAxis.setLabel("City/Township");       
+		        yAxis.setLabel("Value");
+		        
+		        ObservableList<List<Object>> tData = table.getItems();
+		        ArrayList<Object> tList = new ArrayList<>();
+		        //tData.forEach((t) -> {tList.add(t);});
+		        tData.forEach((t) -> {
+		        	List<Object> a = t;
+		        	int counter = tData.indexOf(t);
+		        	XYChart.Series<String, Number> series = new XYChart.Series<>();
+	        		series.setName((String) a.get(0));
+		        	for(int i = 1; i < a.size(); i++) {
+		        		series.getData().add(new XYChart.Data(columnNamesData.get(i), a.get(i)));
+		        	}
+		        	bc.getData().addAll(series);
+		        	});
+		        
+		       
+				Scene scene = new Scene(bc, 800, 600);
+				Stage stage = new Stage();
+				stage.setScene(scene);
+		        stage.show();
+		        
+			}
+			
+		});
 		
+        
+       
 		
 		// Sets things to areas of the border pane
 		bp.setTop(dropDownHBox);

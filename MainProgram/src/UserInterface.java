@@ -139,13 +139,27 @@ public class UserInterface extends Application {
 				Label printer = new Label();
 				printer.setFont(Font.font("Courier New"));
 				Statistics test = new Statistics();
-				String query = "";
+				
+				//New query method.
+				String select = "distinct Migeo2010.NAME";
+				String from = "((((Migeo2010 inner join SF1_00004 on (Migeo2010.LOGRECNO = SF1_00004.LOGRECNO)) inner join Migeo on (Migeo2010.NAME = Migeo.NAME))inner join Mi00006 on (Migeo.LOGRECNO = Mi00006.LOGRECNO)) inner join SF1_00003 on (Migeo2010.LOGRECNO = SF1_00003.LOGRECNO)) inner join SF1_00005 on (Migeo2010.LOGRECNO = SF1_00005.LOGRECNO)";
+				if(medAgeBySex.isSelected()) {
+					select += test.getMedianAgebySex();
+				}
+				if(population.isSelected()) {
+					select += test.getAllPop();
+				}
+				
+				String query = "SELECT " + select + " FROM " + from + "WHERE NAME =";
+				
+				/*Old query method.
 				if(population.isSelected() && medAgeBySex.isSelected())
 					query =  test.getPopandMedAge();
 				else if(medAgeBySex.isSelected())
 					query = test.getMedianAgebySex();
 				else if(population.isSelected())
 					query = test.getAllPop();
+				*/
 				try {
 				Statistics stat = new Statistics();
 				 Stat stats = stat.getAllData(query, searchText);
@@ -338,12 +352,7 @@ public class UserInterface extends Application {
 
 	public static void main(String[] args) {
 		Statistics test = new Statistics();
-		try {
-			displayData(test.runQuery(test.getAllPop(),"Crystal Falls township"));
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		launch(args);
 	}
 

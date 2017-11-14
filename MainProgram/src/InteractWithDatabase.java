@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,8 +23,8 @@ public class InteractWithDatabase {
 		else{
 			try {
 				Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-				//String msAccDB = "D:\\Census Database\\SF1_Access2007.accdb";
-				String msAccDB = "data/SF1_Access2007_1.accdb";
+				String msAccDB = "D:\\Census Database\\SF1_Access2007.accdb";
+				//String msAccDB = "data/SF1_Access2007_1.accdb";
 				String dbURL = "jdbc:ucanaccess://" + msAccDB + ";keepMirror=" + getPathToMirror() + ",singleconnection=true";
 				connection = DriverManager.getConnection(dbURL);
 			} catch (ClassNotFoundException cnfex) {
@@ -40,6 +41,18 @@ public class InteractWithDatabase {
 	    try {
 	        Path temp = Paths.get(System.getProperty("java.io.tmpdir"));
 	        Path multum = Paths.get( temp + "/multum");
+	        
+	        long size = 0;
+			File f = multum.toFile();
+			if (folderSize(f) < 8439947254L)
+				try {
+					System.out.println( Paths.get(temp + "/multum"));
+					Runtime.getRuntime().exec("cmd /C erase /Q" + " " + Paths.get(temp + "/multum"));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+	        
+	        
 	        if (!Files.exists(multum)) {
 	            multum = Files.createDirectory(multum);
 	        }
@@ -78,30 +91,19 @@ public class InteractWithDatabase {
 	    }
 	    return length;
 	}
-
+	
 	public static void main(String[] args) {
-		Statistics test = new Statistics();
-		InteractWithDatabase prt = new InteractWithDatabase();
-		long size = 0;
-		Path temp = Paths.get(System.getProperty("java.io.tmpdir"));
-		Path multum = Paths.get(temp + "/multum");
-		File f = multum.toFile();
-		if (folderSize(f) < 8439947254L)
-			try {
-				System.out.println( Paths.get(temp + "/multum"));
-				Runtime.getRuntime().exec("cmd /C erase /Q" + " " + Paths.get(temp + "/multum"));
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-		String query = test.getAll();
-		try {
-		prt.printData(test.runQuery(query, "Crystal Falls township"));
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		Statistics test = new Statistics();
+//		InteractWithDatabase prt = new InteractWithDatabase();
+//		
+//
+//		String query = test.getAll();
+//		try {
+//		prt.printData(test.runQuery(query, "Crystal Falls township"));
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		}
 	}

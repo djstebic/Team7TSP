@@ -2,6 +2,12 @@
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -36,6 +42,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -103,12 +110,25 @@ public class UserInterface extends Application {
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Help Dialog");
 				alert.setHeaderText("Help Dialog");
-				alert.setContentText("This page is for help while operating the program.\n"
-						+ "-Select townships from the search bar at the top.");
+				
+//				alert.setContentText("This page is for help while operating the program.\n"
+//						+ "-Select townships from the search bar at the top.");
 
+				try {
+					String content = readFile("ReadMe.txt", StandardCharsets.UTF_8);
+					alert.setContentText(content);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				alert.setResizable(true);
+				alert.getDialogPane().setPrefSize(1000, 480);
+				
 				alert.showAndWait();
 			}
 		});
+		
+		
 		
 		HBox testoutput = new HBox();
 		TableView<List<Object>> table = new TableView<List<Object>>();
@@ -322,6 +342,11 @@ public class UserInterface extends Application {
 			e.printStackTrace();
 		}
 		return townships;
+	}
+	
+	static String readFile(String path, Charset encoding) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, encoding);
 	}
 	
 	public static String displayData(ResultSet toPrint) throws SQLException{

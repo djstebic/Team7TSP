@@ -57,7 +57,7 @@ public class Statistics {
 
 	public String getAllPop() {
 		//return "select distinct NAME, P0030002 as [White \nPopulation], P0030003 as [Black \nPopulation], P0030004 as [Indian \nPopulation], P0030005 as [Asian \nPopulation], P0030006 as [Hawaiian \nPopulation],P0030007 as [Other Race \nPopulation], P0030008 as [Multi-Race \nPopulation] from Migeo2010 INNER JOIN  SF1_00003 ON (Migeo2010.LOGRECNO = SF1_00003.LOGRECNO ) where NAME =";
-		return ", P0030002 as [White \nPopulation], P0030003 as [Black \nPopulation], P0030004 as [Indian \nPopulation], P0030005 as [Asian \nPopulation], P0030006 as [Hawaiian \nPopulation],P0030007 as [Other Race \nPopulation], P0030008 as [Multi-Race \nPopulation]";
+		return ", POP100 as [Total \nPopulation], P0030002 as [White \nPopulation], P0030003 as [Black \nPopulation], P0030004 as [Indian \nPopulation], P0030005 as [Asian \nPopulation], P0030006 as [Hawaiian \nPopulation],P0030007 as [Other Race \nPopulation], P0030008 as [Multi-Race \nPopulation]";
 	}
 
 	public String getPopandMedAge() {
@@ -72,12 +72,12 @@ public class Statistics {
 	
 	public String getAggregateHouseholdIncome(){
 		//return "select distinct P054001 as [Aggregate Household \nIncome in 1999] from Migeo inner join Mi00006 on (Migeo.LOGRECNO = Mi00006.LOGRECNO) where NAME =";
-		return "distinct P054001 as [Aggregate Household \nIncome in 1999]";
+		return ", P053001 as [Median Household \nIncome in 1999], P054001 as [Aggregate Household \nIncome in 1999]";
 	}
 	
 	public String getTotalHouseholds(){
 		//return "select distinct P0280001 as [Total \nHouseholds] from Migeo2010 inner join SF1_00005 on (Migeo2010.LOGRECNO = SF1_00005.LOGRECNO) where NAME =";
-		return ",distinct P0280001 as [Total \nHouseholds]";
+		return ", P0280001 as [Total \nHouseholds]";
 	}
 	public String getAll(){
 		//return "SELECT distinct Migeo2010.NAME, P0130001 as [Median Age], P0130002 as [Median Age \nMale], P0130003 as [Median Age \nFemale],P053001 as [Median Income], POP100 as [Total \nPopulation], P0030002 as [White \nPopulation], P0030003 as [Black \nPopulation], P0030004 as [Indian \nPopulation], P0030005 as [Asian \nPopulation], P0030006 as [Hawaiian \nPopulation], P0030007  as [Other Race \nPopulation], P0030008 as [Multi-Race \nPopulation], P0280001 as [Total \nHouseholds] from ((((Migeo2010 inner join SF1_00004 on (Migeo2010.LOGRECNO = SF1_00004.LOGRECNO)) inner join Migeo on (Migeo2010.NAME = Migeo.NAME))inner join Mi00006 on (Migeo.LOGRECNO = Mi00006.LOGRECNO)) inner join SF1_00003 on (Migeo2010.LOGRECNO = SF1_00003.LOGRECNO)) inner join SF1_00005 on (Migeo2010.LOGRECNO = SF1_00005.LOGRECNO) where Migeo2010.NAME =";
@@ -91,7 +91,8 @@ public class Statistics {
 		ResultSet result = null;
 		try {
 			state = con.createStatement();
-			result = state.executeQuery("select distinct NAME from Migeo2010 where NAME not like 'remainder%' intersect select distinct NAME from Migeo2010 where NAME like '%township'");
+			result = state.executeQuery("select distinct NAME from Migeo2010 where NAME not like 'remainder%' intersect select distinct NAME from Migeo2010 where NAME like '%township' UNION select distinct NAME from Migeo2010 where Name like '%city'");
+			//result = state.executeQuery("select distinct NAME from Migeo2010 where NAME like '%township%'");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -103,10 +104,11 @@ public class Statistics {
 		Connection con = InteractWithDatabase.getConnection();
 		Statement state = null;
 		ResultSet result = null;
+		
 		try {
 			state = con.createStatement();
-			query = query.replaceAll("(select.*NAME=?)(.*)", location);
-			query = query + " \"" + location + "\"";
+			query = query.replaceAll("(select.*NAME=?, replacement)(.*)", location);
+			query = query + " \"" + location + "\" ";
 			System.out.println(query);
 			result = state.executeQuery(query);
 		} catch (SQLException e) {
@@ -120,9 +122,11 @@ public class Statistics {
 
 		List<List<Object>> stats = new ArrayList<>();
 		List<String> columnNames = new ArrayList<>();
+		
 		String temp = "\"" + location + "\"";
 		query = query.replaceAll("(?<=NAME=)\\s?", temp);
 		query = query + " \"" + location + "\"";
+
 		System.out.println(query);
 		try (Statement state = con.createStatement(); ResultSet result = state.executeQuery(query)) {
 

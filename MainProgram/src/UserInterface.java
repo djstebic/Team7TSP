@@ -140,6 +140,7 @@ public class UserInterface extends Application {
 		ToggleButton population = new ToggleButton("Population");
 		ToggleButton medAgeBySex = new ToggleButton("Median Age By Sex");
 		ToggleButton income =  new ToggleButton("Income");
+		ToggleButton housing = new ToggleButton("Housing");
 		
 		Button graph = new Button();
 		ArrayList<String> columnNamesData = new ArrayList<>();
@@ -161,14 +162,21 @@ public class UserInterface extends Application {
 				Statistics test = new Statistics();
 				
 				//New query method.
-				String select = "distinct Migeo2010.NAME, (select NAME from Migeo2010 where COUNTY in (select distinct COUNTY from Migeo2010 where NAME= ) and SUMLEV = \"050\") as [County]";
-				String from = "((((Migeo2010 inner join SF1_00004 on (Migeo2010.LOGRECNO = SF1_00004.LOGRECNO)) inner join Migeo on (Migeo2010.NAME = Migeo.NAME))inner join Mi00006 on (Migeo.LOGRECNO = Mi00006.LOGRECNO)) inner join SF1_00003 on (Migeo2010.LOGRECNO = SF1_00003.LOGRECNO)) inner join SF1_00005 on (Migeo2010.LOGRECNO = SF1_00005.LOGRECNO)";
+				String select = "distinct Migeo2010.NAME as Name, (select NAME from Migeo2010 where COUNTY in (select distinct COUNTY from Migeo2010 where NAME= ) and SUMLEV = \"050\") as [County]";
+				String from = "((((Migeo2010 inner join SF1_00004 on (Migeo2010.LOGRECNO = SF1_00004.LOGRECNO)) inner join Migeo on (Migeo2010.NAME = Migeo.NAME)) inner join Mi00006 on (Migeo.LOGRECNO = Mi00006.LOGRECNO)) inner join SF1_00003 on (Migeo2010.LOGRECNO = SF1_00003.LOGRECNO)) inner join SF1_00005 on (Migeo2010.LOGRECNO = SF1_00005.LOGRECNO)";
 				if(medAgeBySex.isSelected()) {
 					select += test.getMedianAgebySex();
 				}
 				if(population.isSelected()) {
 					select += test.getAllPop();
 				}
+				if(income.isSelected() ){
+					select += test.getAggregateHouseholdIncome();
+				}
+				if(housing.isSelected()) {
+					select += test.getTotalHouseholds();
+				}
+				
 				
 				String query = "SELECT " + select + " FROM " + from + "WHERE NAME =";
 				
@@ -254,7 +262,11 @@ public class UserInterface extends Application {
 		//Adds all attributes to the VBox
 		attributes.getChildren().add(population);
 		attributes.getChildren().add(medAgeBySex);
+		attributes.getChildren().add(income);
+		attributes.getChildren().add(housing);
+		
 		bottom.getChildren().add(graph);
+		bottom.setAlignment(Pos.BOTTOM_LEFT);
 		//bottom.getChildren().add(clear);
 
 		

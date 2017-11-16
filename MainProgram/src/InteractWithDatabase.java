@@ -23,7 +23,7 @@ public class InteractWithDatabase {
 		else{
 			try {
 				Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-//				String msAccDB = "D:\\Census Database\\SF1_Access2007.accdb";
+				//String msAccDB = "D:\\Census Database\\SF1_Access2007.accdb";
 				String msAccDB = "data/SF1_Access2007_1.accdb";
 				String dbURL = "jdbc:ucanaccess://" + msAccDB + ";keepMirror=" + getPathToMirror() + ",singleconnection=true";
 				connection = DriverManager.getConnection(dbURL);
@@ -40,13 +40,19 @@ public class InteractWithDatabase {
 	public static Path getPathToMirror() {
 	    try {
 	        Path temp = Paths.get(System.getProperty("java.io.tmpdir"));
-	        Path multum = Paths.get( temp + "/multum");
+	    	//String temp = "";
+	    	Path multum = Paths.get(temp + "/multum");
 	        
 	        long size = 0;
 	        if (!Files.exists(multum)) {
 	            multum = Files.createDirectory(multum);
 	        }
-			File f = multum.toFile();
+	        Path hsqldb = Paths.get(multum + "/hsqldb");
+	        if (!Files.exists(hsqldb)) {
+	            hsqldb = Files.createDirectory(hsqldb);
+	        }
+	        
+	        File f = multum.toFile();
 			if (folderSize(f) < 8439947254L)
 				try {
 					System.out.println( Paths.get(temp + "/multum"));
@@ -54,11 +60,7 @@ public class InteractWithDatabase {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-	        Path hsqldb = Paths.get(multum + "/hsqldb");
-	        if (!Files.exists(hsqldb)) {
-	            hsqldb = Files.createDirectory(hsqldb);
-	        }
-
+			
 	        return hsqldb;
 	    } catch (IOException e) {
 	        System.out.println("Unable to create Hsqldb directory");
@@ -94,13 +96,11 @@ public class InteractWithDatabase {
 	public static void main(String[] args) {
 //		Statistics test = new Statistics();
 //		InteractWithDatabase prt = new InteractWithDatabase();
-//		Connection con = InteractWithDatabase.getConnection();
-//		ResultSet res = test.runQuery("select COUNTY from Migeo2010 where NAME =", "Crystal Falls township");
+//		
+//
 //		String query = test.getAll();
 //		try {
-//		Statement state = con.createStatement();
-//		prt.printData(state.executeQuery("select NAME from Migeo2010 where COUNTY in (select COUNTY from Migeo2010 where NAME = \"Crystal Falls township\") and SUMLEV = \"050\""));
-//			
+//		prt.printData(test.runQuery(query, "Crystal Falls township"));
 //		} catch (SQLException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();

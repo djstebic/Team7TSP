@@ -161,7 +161,7 @@ public class UserInterface extends Application {
 				Statistics test = new Statistics();
 				
 				//New query method.
-				String select = "distinct Migeo2010.NAME";
+				String select = "distinct Migeo2010.NAME, (select NAME from Migeo2010 where COUNTY in (select distinct COUNTY from Migeo2010 where NAME= ) and SUMLEV = \"050\") as [County]";
 				String from = "((((Migeo2010 inner join SF1_00004 on (Migeo2010.LOGRECNO = SF1_00004.LOGRECNO)) inner join Migeo on (Migeo2010.NAME = Migeo.NAME))inner join Mi00006 on (Migeo.LOGRECNO = Mi00006.LOGRECNO)) inner join SF1_00003 on (Migeo2010.LOGRECNO = SF1_00003.LOGRECNO)) inner join SF1_00005 on (Migeo2010.LOGRECNO = SF1_00005.LOGRECNO)";
 				if(medAgeBySex.isSelected()) {
 					select += test.getMedianAgebySex();
@@ -292,7 +292,7 @@ public class UserInterface extends Application {
 		        	int counter = tData.indexOf(t);
 		        	XYChart.Series<String, Number> series = new XYChart.Series<>();
 	        		series.setName((String) a.get(0));
-		        	for(int i = 1; i < a.size(); i++) {
+		        	for(int i = 2; i < a.size(); i++) {
 		        		series.getData().add(new XYChart.Data(columnNamesData.get(i), a.get(i)));
 		        	}
 		        	bc.getData().addAll(series);

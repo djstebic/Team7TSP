@@ -91,7 +91,7 @@ public class Statistics {
 		ResultSet result = null;
 		try {
 			state = con.createStatement();
-			result = state.executeQuery("select distinct NAME from Migeo2010 where NAME like '%township%'");
+			result = state.executeQuery("select distinct NAME from Migeo2010 where NAME not like 'remainder%' intersect select distinct NAME from Migeo2010 where NAME like '%township'");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -105,7 +105,9 @@ public class Statistics {
 		ResultSet result = null;
 		try {
 			state = con.createStatement();
+			query = query.replaceAll("(select.*NAME=?)(.*)", location);
 			query = query + " \"" + location + "\"";
+			System.out.println(query);
 			result = state.executeQuery(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -118,9 +120,10 @@ public class Statistics {
 
 		List<List<Object>> stats = new ArrayList<>();
 		List<String> columnNames = new ArrayList<>();
-
+		String temp = "\"" + location + "\"";
+		query = query.replaceAll("(?<=NAME=)\\s?", temp);
 		query = query + " \"" + location + "\"";
-
+		System.out.println(query);
 		try (Statement state = con.createStatement(); ResultSet result = state.executeQuery(query)) {
 
 			int columnCount = result.getMetaData().getColumnCount();

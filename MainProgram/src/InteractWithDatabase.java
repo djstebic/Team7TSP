@@ -77,7 +77,7 @@ public class InteractWithDatabase {
 		System.out.println();
 		while (toPrint.next()) {
 			for (int i = 1; i <= columnsNumber; i++) {
-				System.out.printf("%-15.15s",  toPrint.getString(i));
+				System.out.printf("%-12.10s",  toPrint.getString(i));
 			}
 			System.out.println("");
 		}
@@ -94,17 +94,15 @@ public class InteractWithDatabase {
 	}
 	
 	public static void main(String[] args) {
-//		Statistics test = new Statistics();
-//		InteractWithDatabase prt = new InteractWithDatabase();
-//		
-//
-//		String query = test.getAll();
-//		try {
-//		prt.printData(test.runQuery(query, "Crystal Falls township"));
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		Statistics test = new Statistics();
+		InteractWithDatabase prt = new InteractWithDatabase();
+		
+		try {
+		prt.printData(test.runQuery("select * from Migeo2010 where NAME= ", "Adams township 2"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		}
 	}

@@ -162,7 +162,7 @@ public class UserInterface extends Application {
 				Statistics test = new Statistics();
 				
 				//New query method.
-				String select = "distinct Migeo2010.NAME as Name, (select NAME from Migeo2010 where COUNTY in (select distinct COUNTY from Migeo2010 where NAME= ) and SUMLEV = \"050\") as [County]";
+				String select = "distinct Migeo2010.NAME as Name, (select distinct NAME from Migeo2010 where COUNTY in (select distinct COUNTY from Migeo2010 where NAME= ) and SUMLEV = \"050\") as [County]";
 				String from = "((((Migeo2010 inner join SF1_00004 on (Migeo2010.LOGRECNO = SF1_00004.LOGRECNO)) inner join Migeo on (Migeo2010.NAME = Migeo.NAME)) inner join Mi00006 on (Migeo.LOGRECNO = Mi00006.LOGRECNO)) inner join SF1_00003 on (Migeo2010.LOGRECNO = SF1_00003.LOGRECNO)) inner join SF1_00005 on (Migeo2010.LOGRECNO = SF1_00005.LOGRECNO)";
 				if(medAgeBySex.isSelected()) {
 					select += test.getMedianAgebySex();

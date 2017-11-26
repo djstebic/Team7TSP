@@ -1,0 +1,19 @@
+This program requires the US Census 2010 database as well as supplemental information from the US 2000 Census.
+In order for this program to function correctly the Access databases must be linked together and must all be linked in the database named SF1_ACCESS2007_1.accdb
+
+
+Database Files:
+	1) Provided are 6 database files, these should be saved in a directory name "data".
+
+
+Linking Instructions:
+	1) Open the file named SF1_ACCESS2007_1.accdb.
+	2) Choose import data from an existing Access database and choose the link option.
+	3) Browse to where you have saved the other provided database files and select SF1_ACCESS2007_2.accdb .
+	4) Link any table that begins with SF1, Migeo, or is named Mi00006.
+	5) Repeat this process selecting the files named SF1_ACCESS2007_3, SF1_ACCESS2007_4, SF1_ACCESS2007_5, and Database2.accdb in step 3.
+
+
+Running Instructions:
+	1) Before Running the Jar file, make sure that the data folder is in the same directory.
+	2) To start the program, run the .jar file.
